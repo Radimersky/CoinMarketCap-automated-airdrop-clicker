@@ -77,8 +77,12 @@ def add_subscription(youtube, channel_id):
 
   except HttpError as e:
     print('Error in Youtube channel with id %s with error code %d and reason:\n%s' % (channel_id, e.resp.status, e.reason))
+    if(e.resp.status is 404):
+      return False
   else:
       print('A subscription to \'%s\' was added.' % channel_id)
+  return True
+
 
 
 ## HOW TO USE ##

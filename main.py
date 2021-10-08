@@ -143,12 +143,17 @@ def main(accounts_index_arr):
                         elif all(words in instruction for words in ['Follow', 'YouTube']):
                             link = action_element.find_element_by_css_selector("a").get_attribute('href')
                             id = link.split('/')[-1]
-                            add_subscription(youtube_service, id)
+                            subscription_success = add_subscription(youtube_service, id)
+                            if(not subscription_success):
+                                error_messages.append(coin_name)
+                                error_messages.append('Failed to subscribe youtube account using link: ' + link + "\n")
+                                error_happened = True
+                                break
 
                         elif all(words in instruction for words in ['Join', 'Telegram']):
                             link = action_element.find_element_by_css_selector("a").get_attribute('href')
                             id = link.split('/')[-1]
-                            asyncio.run(join_telegram_channel([id], os.getenv('TELEGRAM_API_ID_' + index), os.getenv('TELEGRAM_API_HASH_' + index)))
+                            asyncio.run(join_telegram_channel([id], 'tg_session_' + index, os.getenv('TELEGRAM_API_ID_' + index), os.getenv('TELEGRAM_API_HASH_' + index)))
 
                         elif all(words in instruction for words in ['Follow ', 'Facebook']):
                             link = action_element.find_element_by_css_selector("a").get_attribute('href')
